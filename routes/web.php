@@ -48,3 +48,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/view/pasien/edit/{id}', [AdminController::class, 'updatePasien'])->name('admin.pasien.update');
     Route::delete('/pasien/delete/{id}', [AdminController::class, 'hapusPasien'])->name('admin.pasien.hapus');
 });
+
+Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
+    Route::get('/pilih-poli', [PendaftaranController::class, 'pilihPoli'])->name('pilih.poli');
+    Route::post('/pilih-poli', [PendaftaranController::class, 'prosesPilihPoli'])->name('proses.pilih.poli');
+    Route::get('/pilih-dokter/{poliId}', [PendaftaranController::class, 'pilihDokter'])->name('pilih.dokter');
+    Route::post('/pilih-dokter', [PendaftaranController::class, 'prosesPilihDokter'])->name('proses.pilih.dokter');
+    Route::get('/nomor-antrian/{id}', [PendaftaranController::class, 'nomorAntrian'])->name('nomor.antrian');
+});
