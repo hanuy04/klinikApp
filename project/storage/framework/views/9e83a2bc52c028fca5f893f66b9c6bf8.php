@@ -59,7 +59,7 @@
     <nav class="navbar header navbar-dark">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">KlinikApp</span>
-            <a href="{{ route('login') }}" class="btn btn-login text-white">Login</a>
+            <a href="<?php echo e(route('showLoginPage')); ?>" class="btn btn-login text-white">Login</a>
         </div>
     </nav>
 
@@ -96,3 +96,4 @@
 </body>
 
 </html>
+<?php /**PATH C:\Users\Hanvy\Documents\klinikApp\project\resources\views/welcome.blade.php ENDPATH**/ ?>
