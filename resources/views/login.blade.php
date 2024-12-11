@@ -1,9 +1,9 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card shadow-lg" style="width: 100%; max-width: 400px;">
-            <div class="card-header text-center">
+    <div class="d-flex justify-content-center align-items-center min-vh-100" style="background-color: #b3e5fc;">
+        <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px;">
+            <div class="card-header text-center" style="background-color: #0288d1; color: white;">
                 <h3>Login</h3>
             </div>
             <div class="card-body">
@@ -17,7 +17,9 @@
                         <label for="password" class="form-label">Password</label>
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn w-100 text-white" style="background-color: #a40000; border: none;">
+                        Login
+                    </button>
                 </form>
                 @if (session('error'))
                     <div class="mt-3 alert alert-danger text-center">

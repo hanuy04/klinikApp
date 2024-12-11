@@ -12,6 +12,8 @@
 </head>
 
 <body>
+    @yield('navbar')
+
     <div class="w-full">
         @yield('content')
     </div>
