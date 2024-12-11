@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Pasien;
 use App\Models\Poliklinik;
@@ -62,4 +64,3 @@ class PendaftaranController extends Controller
         return view('nomor_antrian', compact('pendaftaran'));
     }
 }
-

@@ -41,6 +41,8 @@ class MainController extends Controller
             return redirect()->route('admin.dashboard');
         } else if ($user->role === 'dokter') {
             return redirect()->route('dokter.dashboard');
+        } else {
+            return redirect()->route('pilih.poli');
         }
 
         // Redirect to login page if no valid role

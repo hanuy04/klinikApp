@@ -36,6 +36,8 @@
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
         <h1>Pasien</h1>
 
+        <a href="{{ route('admin.pasien.create') }}" class="btn btn-primary mb-3">Tambah Pasien</a>
+
         <table class="table table-striped">
             <thead>
                 <tr>

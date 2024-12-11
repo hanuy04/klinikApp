@@ -9,13 +9,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.dashboard') }}" style="color: white;">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.poli') }}" style="color: white;">Poli</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="{{ route('admin.dokter') }}" style="color: white;">Dokter</a>
                 </li>
                 <li class="nav-item">
@@ -34,41 +34,38 @@
 
 @section('content')
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
-        <h1>Dokter</h1>
+        <h2>Tambah Pasien</h2>
 
-        <a href="{{ route('admin.dokter.create') }}" class="btn btn-primary mb-3">Tambah Dokter</a>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">ID Dokter</th>
-                    <th scope="col">Nama Dokter</th>
-                    <th scope="col">Alamat</th>
-                    <th scope="col">No HP</th>
-                    <th scope="col">Nama Poli</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($dokter as $d)
-                    <tr>
-                        <td>{{ $d->id }}</td>
-                        <td>{{ $d->nama }}</td>
-                        <td>{{ $d->alamat }}</td>
-                        <td>{{ $d->no_hp }}</td>
-                        <td>{{ $d->poli->nama_poli }}</td>
-                        <td>
-                            <a href="{{ route('admin.dokter.edit', $d->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.dokter.hapus', $d->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <form action="{{ route('admin.pasien.add') }}" method="POST">
+            @csrf
+
+            <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+
+            <div class="form-group">
+                <label for="no_ktp">No KTP</label>
+                <input type="text" class="form-control" id="no_ktp" name="no_ktp" required>
+            </div>
+
+            <div class="form-group">
+                <label for="no_hp">No HP</label>
+                <input type="text" class="form-control" id="no_hp" name="no_hp" required>
+            </div>
+
+            <button type="submit" class="btn" style="background-color: blue; color: white;">Tambah</button>
+            <a href="{{ route('admin.poli') }}" class="btn" style="background-color: red; color: white;">Batal</a>
+        </form>
     </div>
 @endsection

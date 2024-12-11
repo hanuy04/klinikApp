@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dokter;
 use App\Models\Pasien;
 use App\Models\Poli;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -85,7 +86,7 @@ class AdminController extends Controller
         $request->validate([
             'nama' => 'required|string|max:150',
             'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|integer',
+            'no_hp' => 'required|string|max_digits:10',
             'poli_id' => 'required|integer',
         ]);
 
@@ -95,6 +96,12 @@ class AdminController extends Controller
         $dokter->no_hp = $request->input('no_hp');
         $dokter->id_poli = $request->input('poli_id');
         $dokter->save();
+
+        $user = User::where('name', $dokter->nama)->where('role', 'dokter')->first();
+        if ($user) {
+            $user->updated_at = now();
+            $user->save();
+        }
 
         return redirect()->route('admin.dokter')->with('success', 'Data Dokter berhasil diperbarui.');
     }
@@ -112,18 +119,156 @@ class AdminController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:150',
-            'no_ktp' => 'required|string|max:255',
-            'no_hp' => 'required|integer|max:10',
+            'no_ktp' => 'required|string|max_digits:10',
+            'no_hp' => 'required|string|max_digits:10',
             'no_rm' => 'required|char|max:10',
         ]);
 
-        $dokter = Dokter::findOrFail($id);
-        $dokter->nama = $request->input('nama');
-        $dokter->no_ktp = $request->input('no_ktp');
-        $dokter->no_hp = $request->input('no_hp');
-        $dokter->no_rm = $request->input('no_rm');
-        $dokter->save();
+        $pasien = Pasien::findOrFail($id);
+        $pasien->nama = $request->input('nama');
+        $pasien->no_ktp = $request->input('no_ktp');
+        $pasien->no_hp = $request->input('no_hp');
+        $pasien->no_rm = $request->input('no_rm');
+        $pasien->save();
+
+        $user = User::where('name', $pasien->nama)->where('role', 'pasien')->first();
+        if ($user) {
+            $user->updated_at = now();
+            $user->save();
+        }
 
         return redirect()->route('admin.pasien')->with('success', 'Data Pasien berhasil diperbarui.');
+    }
+
+    // panggil halaman add poli
+    public function createPoli()
+    {
+        return view('admin.addPoli');
+    }
+
+    // add poli
+    public function addPoli(Request $request)
+    {
+        $request->validate([
+            'nama_poli' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $poli = new Poli;
+        $poli->nama_poli = $request->input('nama_poli');
+        $poli->keterangan = $request->input('keterangan');
+        $poli->save();
+
+        return redirect()->route('admin.poli')->with('success', 'Data Poli berhasil ditambahkan.');
+    }
+
+    // panggil halaman add dokter
+    public function createDokter()
+    {
+        $polis = Poli::all();
+
+        return view('admin.addDokter', compact('polis'));
+    }
+
+    // add dokter
+    public function addDokter(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string|max:255',
+            'no_hp' => 'required|string|max_digits:10',
+            'id_poli' => 'required|integer',
+        ]);
+
+        $dokter = new Dokter();
+        $dokter->nama = $request->input('nama');
+        $dokter->alamat = $request->input('alamat');
+        $dokter->no_hp = $request->input('no_hp');
+        $dokter->id_poli = $request->input('id_poli');
+        $dokter->save();
+
+        User::create([
+            'name' => $request->input('nama'),
+            'email' => strtolower(str_replace(' ', '_', $request->input('nama'))) . "@gmail.com",
+            'password' => '123',
+            'role' => 'dokter',
+        ]);
+
+        return redirect()->route('admin.dokter')->with('success', 'Data Dokter berhasil ditambahkan.');
+    }
+
+    // panggil halaman add pasien
+    public function createPasien()
+    {
+        return view('admin.addPasien');
+    }
+
+    // add pasien
+    public function addPasien(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'no_ktp' => 'required|string|max_digits:10',
+            'no_hp' => 'required|string|max_digits:10',
+        ]);
+
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+
+        $lastPatient = Pasien::where('no_rm', 'LIKE', "$currentYear$currentMonth-%")
+            ->orderBy('no_rm', 'desc')
+            ->first();
+
+        if ($lastPatient) {
+            $lastNumber = (int) substr($lastPatient->no_rm, -3);
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        $no_rm = sprintf('%s%s-%03d', $currentYear, $currentMonth, $nextNumber);
+
+        $pasien = new Pasien();
+        $pasien->nama = $request->input('nama');
+        $pasien->no_ktp = $request->input('no_ktp');
+        $pasien->no_hp = $request->input('no_hp');
+        $pasien->no_rm = $no_rm;
+        $pasien->save();
+
+        User::create([
+            'name' => $request->input('nama'),
+            'email' => strtolower(str_replace(' ', '_', $request->input('nama'))) . "@gmail.com",
+            'password' => '123',
+            'role' => 'pasien',
+        ]);
+
+        return redirect()->route('admin.pasien')->with('success', 'Data Pasien berhasil ditambahkan!');
+    }
+
+    // hapus poli
+    public function hapusPoli($id)
+    {
+        $poli = Poli::findOrFail($id);
+        $poli->delete();
+
+        return redirect()->route('admin.poli')->with('success', 'Data Poli berhasil dihapus.');
+    }
+
+    // hapus dokter
+    public function hapusDokter($id)
+    {
+        $dokter = Dokter::findOrFail($id);
+        $dokter->delete();
+
+        return redirect()->route('admin.dokter')->with('success', 'Data Dokter berhasil dihapus.');
+    }
+
+    // hapus pasien
+    public function hapusPasien($id)
+    {
+        $pasien = Pasien::findOrFail($id);
+        $pasien->delete();
+
+        return redirect()->route('admin.pasien')->with('success', 'Data Pasien berhasil dihapus.');
     }
 }
