@@ -1,3 +1,4 @@
+@include('dokter.navdokter')
 <div class="container">
     <p class="text-center" style="font-size: 35px"><b>Pengaturan Akun</b></p>
     <form>
@@ -20,3 +21,6 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+</body>
+
+</html>

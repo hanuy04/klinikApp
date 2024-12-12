@@ -1,3 +1,4 @@
+@include('dokter.navdokter')
 <div class="container">
     <p class="text-center" style="font-size: 35px"><b>Detail Pasien</b></p>
     <p>Nama : Budi </p>
@@ -8,6 +9,7 @@
     <table class="table table-striped" style="border:2px solid #dee6ed">
         <thead>
             <tr>
+                <th scope="col">Poli</th>
                 <th scope="col">Tanggal</th>
                 <th scope="col">Obat</th>
                 <th scope="col">Biaya Periksa</th>
@@ -18,9 +20,13 @@
             <tr>
                 <th scope="row">1</th>
                 <td>Mark</td>
+                <td>Mark</td>
                 <td>Otto</td>
                 <td>@mdo</td>
             </tr>
         </tbody>
     </table>
 </div>
+</body>
+
+</html>

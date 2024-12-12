@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DokterController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +84,6 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     // Proses pendaftaran pasien dan nomor antrian
     Route::post('/daftar-antrian', [PatientController::class, 'daftarAntrian'])->name('pasien.daftar-antrian');
 });
-Route::get('/dokter', function () {
-    return view('dokter/dashboard');
+Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
+    Route::get('/dashboard',[DokterController::class,'showDashboard'])->name('dokter.dashboard');
 });

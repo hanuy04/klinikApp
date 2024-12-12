@@ -1,4 +1,4 @@
-
+@include('dokter.navdokter')
 <div class="container">
     <p style="font-size: 30px" class="text-center">Riwayat Pemeriksaan</p>
     <table class="table table-striped" style="border:2px solid #dee6ed">
@@ -20,3 +20,6 @@
         </tbody>
     </table>
 </div>
+</body>
+
+</html>

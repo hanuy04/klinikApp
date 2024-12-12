@@ -40,10 +40,3 @@
 </nav>
 
 <body>
-@foreach ($listpasien as $item)
-    <p>{{$item->keluhan}}</p>
-@endforeach
-@include('dokter/detailpasien')
-</body>
-
-</html>

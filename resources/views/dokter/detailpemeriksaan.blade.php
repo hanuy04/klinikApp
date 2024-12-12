@@ -1,3 +1,4 @@
+@include('dokter.navdokter')
 <div class="container">
     <p class="text-center" style="font-size: 35px"><b>Detail Pemeriksaan</b></p>
     <p>Nama : Budi </p>
@@ -35,3 +36,6 @@
         </div>
     </form>
 </div>
+</body>
+
+</html>

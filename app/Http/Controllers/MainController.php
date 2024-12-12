@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -40,6 +39,7 @@ class MainController extends Controller
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } else if ($user->role === 'dokter') {
+            $request->session()->put("idlogin",$user->id);
             return redirect()->route('dokter.dashboard');
         } else {
             return redirect()->route('pasien.pilih-poli');
