@@ -68,3 +68,6 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::get('/dashboard_pasien', [PatientController::class, 'showDashboardPasien'])->name('pasien.dashboard_pasien');
  
 });
+Route::get('/dokter',function(){
+    return view('dokter/dashboard');
+});
