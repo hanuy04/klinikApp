@@ -1,47 +1,31 @@
+
 @extends('pasien.dashboard_pasien')
 
 @section('content')
 <div class="container">
     <h1>Pilih Dokter di Poli {{ $poli->nama_poli }}</h1>
 
-    <form action="{{ route('pasien.pilih-dokter', $poli->id) }}" method="POST">
-        @csrf
-        <input type="hidden" name="pasien_id" value="{{ $pasien->id }}">
-
-        <div class="mb-3">
-            <label for="dokter_id" class="form-label">Pilih Dokter</label>
-            <select name="dokter_id" id="dokter_id" class="form-control" required onchange="this.form.submit()">
-                <option value="">Pilih Dokter</option>
-                @foreach($dokters as $dokter)
-                    <option value="{{ $dokter->id }}" {{ old('dokter_id') == $dokter->id ? 'selected' : '' }}>
-                        {{ $dokter->nama }}
-                    </option>
-                @endforeach
-            </select>
+    <div class="row">
+        @foreach($dokters as $dokter)
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $dokter->nama }}</h5>
+                    <p class="card-text">Jadwal:</p>
+                    <ul>
+                        @foreach($dokter->jadwalPeriksas as $jadwal)
+                            <li>{{ $jadwal->hari }} {{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</li>
+                        @endforeach
+                    </ul>
+                    <form action="{{ route('pasien.pilih-dokter-submit', $poli->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="dokter_id" value="{{ $dokter->id }}">
+                        <button type="submit" class="btn btn-primary">Pilih Dokter</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        @if(!empty($jadwals))
-        <div class="mb-3">
-            <label for="jadwal_id" class="form-label">Pilih Jadwal</label>
-            <select name="jadwal_id" id="jadwal_id" class="form-control" required>
-                <option value="">Pilih Jadwal</option>
-                @foreach($jadwals as $jadwal)
-                    <option value="{{ $jadwal->id }}" {{ old('jadwal_id') == $jadwal->id ? 'selected' : '' }}>
-                        {{ $jadwal->hari }} {{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        @endif
-
-        <div class="mb-3">
-            <label for="keluhan" class="form-label">Keluhan</label>
-            <textarea name="keluhan" id="keluhan" class="form-control">{{ old('keluhan') }}</textarea>
-        </div>
-
-        @if(!empty($jadwals))
-        <button type="submit" class="btn btn-primary">Daftar</button>
-        @endif
-    </form>
+        @endforeach
+    </div>
 </div>
 @endsection

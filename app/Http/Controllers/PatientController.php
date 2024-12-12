@@ -10,7 +10,7 @@ use App\Models\Pasien;
 use App\Models\Poli;
 use App\Models\Dokter;
 use App\Models\Pendaftaran;
-
+use App\Models\JadwalPeriksa;
 
 class PatientController extends Controller
 {
@@ -89,20 +89,6 @@ class PatientController extends Controller
             $user->updated_at = now();
             $user->save();
 
-            // User::create([
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'password' => $request->password,
-            //     'role' => 'pasien',
-            // ]);
-            // }
-
-            // // Hitung jumlah pasien yang terdaftar bulan ini
-            // $currentYearMonth = now()->format('Ym'); // Contoh: 202411
-            // $patientsCount = Pasien::count();
-
-            // // Generate nomor rekam medis dengan format 'RM-TahunBulan-Urutan'
-            // $no_rm = $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
 
             // Simpan data pasien baru ke tabel Pasien
             $pasien = new Pasien;
@@ -111,15 +97,23 @@ class PatientController extends Controller
             $pasien->no_hp = $request->input('no_hp');
             $pasien->save();
 
-            // Pasien::create([
-            //     'nama' => $request->name,
-            //     'no_ktp' => $request->no_ktp,
-            //     'no_hp' => $request->no_hp,
-            //     'no_rm' => $no_rm,
-            // ]);
+            // Simpan data pasien baru ke tabel Pasien
+            $pasien = new Pasien;
+            $pasien->nama = $request->input('name');
+            $pasien->no_ktp = $request->input('no_ktp');
+            $pasien->no_hp = $request->input('no_hp');
+            $pasien->save();
+
         }
 
         return redirect()->route('login_pasien')->with('success', 'Registration successful. Please log in.');
+    }
+
+    // Function to generate a unique no_rm
+    function generateNoRm() {
+        $currentYearMonth = now()->format('Ym'); // Example: 202411
+        $patientsCount = Pasien::count();
+        return 'RM-' . $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
     }
 
     // Halaman memilih poli
@@ -133,34 +127,64 @@ class PatientController extends Controller
     public function pilihDokter(Request $request, Poli $poli)
     {
         $pasien = Pasien::find($request->pasien_id);
-        $dokters = $poli->dokters;
+        $dokters = $poli->dokters()->with('jadwalPeriksas')->get();
 
-        $jadwals = [];
-        if ($request->has('dokter_id')) {
-            $jadwals = JadwalPeriksa::where('id_dokter', $request->dokter_id)->get();
-        }
-
-        return view('pasien.pilih-dokter', compact('poli', 'dokters', 'jadwals', 'pasien'));
+        return view('pasien.pilih-dokter', compact('poli', 'dokters', 'pasien'));
     }
 
-    // Proses pendaftaran nomor antrian
-    public function daftarAntrian(Request $request)
+    public function pilihDokterSubmit(Request $request, Poli $poli)
     {
         $request->validate([
-            'pasien_id' => 'required|exists:pasien,id',
             'dokter_id' => 'required|exists:dokter,id',
-            'jadwal_id' => 'required|exists:jadwal_periksa,id',
         ]);
 
-        $noAntrian = DaftarPoli::where('id_jadwal', $request->jadwal_id)->max('no_antrian') + 1;
+        // Cek pasien
+        $pasien = Pasien::findOrFail($request->pasien_id);
 
-        DaftarPoli::create([
-            'id_pasien' => $request->pasien_id,
-            'id_jadwal' => $request->jadwal_id,
-            'keluhan' => $request->keluhan,
-            'no_antrian' => $noAntrian,
+        // Cek dokter
+        $dokter = Dokter::findOrFail($request->dokter_id);
+
+        // Cek jadwal dokter yang tersedia
+        $jadwal = JadwalPeriksa::where('id_dokter', $dokter->id)->first(); // Sesuaikan logika jadwal
+
+        if (!$jadwal) {
+            return redirect()->back()->withErrors(['error' => 'Jadwal untuk dokter ini tidak tersedia.']);
+        }
+
+        // Hitung nomor antrean
+        $antreanTerakhir = DaftarPoli::where('id_jadwal', $jadwal->id)->max('no_antrian');
+        $nomorAntrian = $antreanTerakhir ? $antreanTerakhir + 1 : 1;
+
+        // Daftarkan pasien ke daftar poli
+        $daftarPoli = DaftarPoli::create([
+            'id_pasien' => $pasien->id,
+            'id_jadwal' => $jadwal->id,
+            'keluhan' => $request->input('keluhan', ''),
+            'no_antrian' => $nomorAntrian,
         ]);
 
-        return redirect()->route('pasien.pilih-poli')->with('success', "Pendaftaran berhasil! Nomor antrian Anda adalah $noAntrian.");
+        // Arahkan ke halaman jadwal pasien
+        return redirect()->route('pasien.jadwal')->with('success', 'Anda berhasil mendaftar ke poli. Nomor antrean Anda: ' . $nomorAntrian);
     }
+
+    public function lihatJadwal(Request $request)
+    {
+        // Mendapatkan pasien berdasarkan ID yang sedang login (diasumsikan pasien login)
+        $pasien = auth()->user()->pasien;
+
+        if (!$pasien) {
+            return redirect()->route('login')->with('error', 'Silakan login sebagai pasien.');
+        }
+
+        // Ambil semua daftar poli yang terkait dengan pasien
+        $daftarPolis = DaftarPoli::where('pasien_id', $pasien->id)
+            ->with(['jadwalPeriksa.dokter', 'jadwalPeriksa.poli'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('pasien.jadwal', compact('daftarPolis'));
+    }
+
 }
+
+
