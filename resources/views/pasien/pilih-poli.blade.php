@@ -16,14 +16,14 @@
         </div>
     @endif
 
-    <ul class="list-group">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         @foreach($polis as $poli)
-            <li class="list-group-item">
-                <a href="{{ route('pasien.pilih-dokter', $poli->id) }}">
-                    {{ $poli->nama_poli }}
-                </a>
-            </li>
+            <div class="bg-white shadow-md rounded px-4 py-6 text-center">
+                <h5 class="text-xl font-bold mb-2">{{ $poli->nama_poli }}</h5>
+                <p class="text-gray-700">{{ $poli->keterangan }}</p>
+                <a href="{{ route('pasien.pilih-dokter', $poli->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pilih</a>
+            </div>
         @endforeach
-    </ul>
+    </div>
 </div>
 @endsection
