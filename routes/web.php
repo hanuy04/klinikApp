@@ -77,9 +77,9 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     // Route::get('/dashboard_pasien', [PatientController::class, 'showDashboardPasien'])->name('pasien.dashboard_pasien');
     // Halaman daftar poli
     Route::get('/pilih-poli', [PatientController::class, 'pilihPoli'])->name('pasien.pilih-poli');
-    Route::get('/pasien/pilih-dokter/{poli}', [PatientController::class, 'pilihDokter'])->name('pasien.pilih-dokter');
-    Route::post('/pasien/pilih-dokter/{poli}', [PatientController::class, 'pilihDokterSubmit'])->name('pasien.pilih-dokter-submit');
-    Route::get('/pasien/jadwal', [PatientController::class, 'lihatJadwal'])->name('pasien.jadwal');
+    Route::get('/pilih-dokter/{poli}', [PatientController::class, 'pilihDokter'])->name('pasien.pilih-dokter');
+    Route::post('/pilih-dokter/{poli}', [PatientController::class, 'pilihDokterSubmit'])->name('pasien.pilih-dokter-submit');
+    Route::get('/jadwal', [PatientController::class, 'lihatJadwal'])->name('pasien.jadwal');
 });
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
     Route::get('/dashboard',[DokterController::class,'showDashboard'])->name('dokter.dashboard');

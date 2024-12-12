@@ -16,7 +16,7 @@
             <nav class="flex-1">
                 <ul>
                     <li class="px-6 py-3 hover:bg-purple-700">
-                        <a href="#" class="block">Pilih Poli</a>
+                        <a href="{{ route('pasien.pilih-poli') }}" class="block">Pilih Poli</a>
                     </li>
                 </ul>
             </nav>
