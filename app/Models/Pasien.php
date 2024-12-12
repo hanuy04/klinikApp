@@ -11,6 +11,7 @@ class Pasien extends Model
 
     protected $table = 'pasien';
     protected $fillable = ['nama', 'no_ktp', 'no_hp', 'no_rm'];
+    public $timestamps = false;
 
     /**
      * Relasi ke model DaftarPoli.

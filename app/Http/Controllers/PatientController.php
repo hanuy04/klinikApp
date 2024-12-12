@@ -69,39 +69,55 @@ class PatientController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            // 'no_ktp' => 'required|numeric|unique:users,no_ktp',
-            // 'no_hp' => 'required|numeric',
+            'email' => 'required|string',
+            'password' => 'required|string',
+            'no_ktp' => 'required|integer',
+            'no_hp' => 'required|integer',
         ]);
 
-        // // Periksa apakah no_ktp sudah terdaftar
-        // $existingUser = Pasien::where('no_ktp', $request->no_ktp)->first();
-        // if ($existingUser) {
-        //     return redirect()->back()->withErrors(['no_ktp' => 'Nomor KTP sudah terdaftar.']);
-        // }else{
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'role' => 'pasien',
-        ]);
-        // }
+        // Periksa apakah no_ktp sudah terdaftar
+        $existingUser = Pasien::where('no_ktp', $request->no_ktp)->first();
+        if ($existingUser) {
+            return redirect()->back()->withErrors(['no_ktp' => 'Nomor KTP sudah terdaftar.']);
+        } else {
+            $user = new User;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = $request->input('password');
+            $user->role = "pasien";
+            $user->created_at = now();
+            $user->updated_at = now();
+            $user->save();
 
-        // // Hitung jumlah pasien yang terdaftar bulan ini
-        // $currentYearMonth = now()->format('Ym'); // Contoh: 202411
-        // $patientsCount = Pasien::count();
+            // User::create([
+            //     'name' => $request->name,
+            //     'email' => $request->email,
+            //     'password' => $request->password,
+            //     'role' => 'pasien',
+            // ]);
+            // }
 
-        // // Generate nomor rekam medis dengan format 'RM-TahunBulan-Urutan'
-        // $no_rm = 'RM: ' . $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
+            // // Hitung jumlah pasien yang terdaftar bulan ini
+            // $currentYearMonth = now()->format('Ym'); // Contoh: 202411
+            // $patientsCount = Pasien::count();
 
-        // // Simpan data pasien baru ke tabel Pasien
-        // Pasien::create([
-        //     'name' => $request->name,
-        //     'no_ktp' => $request->no_ktp,
-        //     'no_hp' => $request->no_hp,
-        //     'no_rm' => $no_rm,
-        // ]);
+            // // Generate nomor rekam medis dengan format 'RM-TahunBulan-Urutan'
+            // $no_rm = $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
+
+            // Simpan data pasien baru ke tabel Pasien
+            $pasien = new Pasien;
+            $pasien->nama = $request->input('name');
+            $pasien->no_ktp = $request->input('no_ktp');
+            $pasien->no_hp = $request->input('no_hp');
+            $pasien->save();
+
+            // Pasien::create([
+            //     'nama' => $request->name,
+            //     'no_ktp' => $request->no_ktp,
+            //     'no_hp' => $request->no_hp,
+            //     'no_rm' => $no_rm,
+            // ]);
+        }
 
         return redirect()->route('login_pasien')->with('success', 'Registration successful. Please log in.');
     }
@@ -147,5 +163,4 @@ class PatientController extends Controller
 
         return redirect()->route('pasien.pilih-poli')->with('success', "Pendaftaran berhasil! Nomor antrian Anda adalah $noAntrian.");
     }
-   
 }
