@@ -9,16 +9,16 @@
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-purple-600 text-white flex flex-col">
+        <aside class="w-64 bg-blue-600 text-white flex flex-col">
             <div class="p-6">
                 <h2 class="text-2xl font-bold">Poliklinik</h2>
             </div>
             <nav class="flex-1">
                 <ul>
-                    <li class="px-6 py-3 hover:bg-purple-700">
+                    <li class="px-6 py-3 hover:bg-blue-700">
                         <a href="{{ route('pasien.pilih-poli') }}" class="block">Pilih Poli</a>
                     </li>
-                    <li class="px-6 py-3 hover:bg-purple-700">
+                    <li class="px-6 py-3 hover:bg-blue-700">
                         <a href="{{ route('pasien.jadwal') }}" class="block">Jadwal</a>
                     </li>
                 </ul>

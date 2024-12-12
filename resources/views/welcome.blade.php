@@ -70,7 +70,7 @@
             <div class="col-6 col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <form action="{{ route('login') }}" >
+                        <form action="{{ route('login_pasien') }}" >
                             <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_640.png"
                                 alt="Pasien Lama" class="rounded-circle mb-3">
                             <h5 class="card-title">Pasien Lama</h5>

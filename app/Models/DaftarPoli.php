@@ -9,6 +9,8 @@ class DaftarPoli extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'daftar_poli';
 
     protected $fillable = [
