@@ -173,7 +173,7 @@ class PatientController extends Controller
         $pasien = auth()->user()->pasien;
 
         if (!$pasien) {
-            return redirect()->route('login')->with('error', 'Silakan login sebagai pasien.');
+            return redirect()->route('pasien.pilih-poli')->with('error', 'Silakan login sebagai pasien.');
         }
 
         // Ambil semua daftar poli yang terkait dengan pasien

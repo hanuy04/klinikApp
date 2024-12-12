@@ -18,6 +18,9 @@
                     <li class="px-6 py-3 hover:bg-purple-700">
                         <a href="{{ route('pasien.pilih-poli') }}" class="block">Pilih Poli</a>
                     </li>
+                    <li class="px-6 py-3 hover:bg-purple-700">
+                        <a href="{{ route('pasien.jadwal') }}" class="block">Jadwal</a>
+                    </li>
                 </ul>
             </nav>
             <form method="POST" action="{{ route('logoutpasien') }}" class="p-6">
