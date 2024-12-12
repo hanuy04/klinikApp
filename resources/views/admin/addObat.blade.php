@@ -37,7 +37,7 @@
 
 @section('content')
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
-        <h3>Edit Pasien</h3>
+        <h2>Tambah Obat</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -49,36 +49,26 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.pasien.update', $pasien->id) }}" method="POST">
+        <form action="{{ route('admin.obat.add') }}" method="POST">
             @csrf
-            @method('PUT')
 
             <div class="form-group">
                 <label for="nama">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama"
-                    value="{{ old('nama', $pasien->nama) }}" required>
+                <input type="text" class="form-control" id="nama_obat" name="nama_obat" required>
             </div>
 
             <div class="form-group">
-                <label for="no_ktp">No. KTP</label>
-                <input type="text" class="form-control" id="no_ktp" name="no_ktp"
-                    value="{{ old('no_ktp', $pasien->no_ktp) }}" required>
+                <label for="alamat">Kemasan</label>
+                <input type="text" class="form-control" id="kemasan" name="kemasan" required>
             </div>
 
             <div class="form-group">
-                <label for="no_hp">No. HP</label>
-                <input type="text" class="form-control" id="no_hp" name="no_hp"
-                    value="{{ old('no_hp', $pasien->no_hp) }}" required>
+                <label for="alamat">Harga</label>
+                <input type="number" class="form-control" id="harga" name="harga" required>
             </div>
 
-            <div class="form-group">
-                <label for="no_rm">No. Rekam Medis</label>
-                <input type="text" class="form-control" id="no_rm" name="no_rm"
-                    value="{{ old('no_rm', $pasien->no_rm) }}" required>
-            </div>
-
-            <button type="submit" class="btn" style="background-color: #a40000; color: white;">Edit</button>
-            <a href="{{ route('admin.pasien') }}" class="btn" style="background-color: #0277bd; color: white;">Batal</a>
+            <button type="submit" class="btn" style="background-color: blue; color: white;">Tambah</button>
+            <a href="{{ route('admin.poli') }}" class="btn" style="background-color: red; color: white;">Batal</a>
         </form>
     </div>
 @endsection

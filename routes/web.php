@@ -41,6 +41,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/view/poli', [AdminController::class, 'showPoli'])->name('admin.poli');
     Route::get('/view/dokter', [AdminController::class, 'showDokter'])->name('admin.dokter');
     Route::get('/view/pasien', [AdminController::class, 'showPasien'])->name('admin.pasien');
+    Route::get('/view/obat', [AdminController::class, 'showObat'])->name('admin.obat');
 
     // crud poli
     Route::get('/poli/create', [AdminController::class, 'createPoli'])->name('admin.poli.create');
@@ -62,6 +63,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/view/pasien/edit/{id}', [AdminController::class, 'editPasien'])->name('admin.pasien.edit');
     Route::put('/view/pasien/edit/{id}', [AdminController::class, 'updatePasien'])->name('admin.pasien.update');
     Route::delete('/pasien/delete/{id}', [AdminController::class, 'hapusPasien'])->name('admin.pasien.hapus');
+
+    // crud obat
+    Route::get('/obat/create', [AdminController::class, 'createObat'])->name('admin.obat.create');
+    Route::post('/obat/create', [AdminController::class, 'addObat'])->name('admin.obat.add');
+    Route::get('/view/obat/edit/{id}', [AdminController::class, 'editObat'])->name('admin.obat.edit');
+    Route::put('/view/obat/edit/{id}', [AdminController::class, 'updateObat'])->name('admin.obat.update');
+    Route::delete('/obat/delete/{id}', [AdminController::class, 'hapusObat'])->name('admin.obat.hapus');
 });
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
@@ -75,6 +83,6 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     // Proses pendaftaran pasien dan nomor antrian
     Route::post('/daftar-antrian', [PatientController::class, 'daftarAntrian'])->name('pasien.daftar-antrian');
 });
-Route::get('/dokter',function(){
+Route::get('/dokter', function () {
     return view('dokter/dashboard');
 });

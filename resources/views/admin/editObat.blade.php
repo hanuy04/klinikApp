@@ -37,7 +37,7 @@
 
 @section('content')
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
-        <h3>Edit Pasien</h3>
+        <h2>Edit Data Obat</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -49,36 +49,30 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.pasien.update', $pasien->id) }}" method="POST">
+        <form action="{{ route('admin.obat.update', $obat->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="nama">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama"
-                    value="{{ old('nama', $pasien->nama) }}" required>
+                <label for="nama_obat">Nama Obat</label>
+                <input type="text" class="form-control" id="nama_obat" name="nama_obat"
+                    value="{{ old('nama_obat', $obat->nama_obat) }}" required>
             </div>
 
             <div class="form-group">
-                <label for="no_ktp">No. KTP</label>
-                <input type="text" class="form-control" id="no_ktp" name="no_ktp"
-                    value="{{ old('no_ktp', $pasien->no_ktp) }}" required>
+                <label for="kemasan">Kemasan</label>
+                <input type="text" class="form-control" id="kemasan" name="kemasan"
+                    value="{{ old('alamat', $obat->kemasan) }}" required>
             </div>
 
             <div class="form-group">
-                <label for="no_hp">No. HP</label>
-                <input type="text" class="form-control" id="no_hp" name="no_hp"
-                    value="{{ old('no_hp', $pasien->no_hp) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="no_rm">No. Rekam Medis</label>
-                <input type="text" class="form-control" id="no_rm" name="no_rm"
-                    value="{{ old('no_rm', $pasien->no_rm) }}" required>
+                <label for="no_hp">Harga</label>
+                <input type="number" class="form-control" id="harga" name="harga"
+                    value="{{ old('harga', $obat->harga) }}" required>
             </div>
 
             <button type="submit" class="btn" style="background-color: #a40000; color: white;">Edit</button>
-            <a href="{{ route('admin.pasien') }}" class="btn" style="background-color: #0277bd; color: white;">Batal</a>
+            <a href="{{ route('admin.dokter') }}" class="btn" style="background-color: #0277bd; color: white;">Batal</a>
         </form>
     </div>
 @endsection

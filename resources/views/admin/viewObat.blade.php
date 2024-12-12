@@ -37,48 +37,38 @@
 
 @section('content')
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
-        <h3>Edit Pasien</h3>
+        <h1>Obat</h1>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <a href="{{ route('admin.obat.create') }}" class="btn btn-primary mb-3">Tambah Obat</a>
 
-        <form action="{{ route('admin.pasien.update', $pasien->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="form-group">
-                <label for="nama">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama"
-                    value="{{ old('nama', $pasien->nama) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="no_ktp">No. KTP</label>
-                <input type="text" class="form-control" id="no_ktp" name="no_ktp"
-                    value="{{ old('no_ktp', $pasien->no_ktp) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="no_hp">No. HP</label>
-                <input type="text" class="form-control" id="no_hp" name="no_hp"
-                    value="{{ old('no_hp', $pasien->no_hp) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="no_rm">No. Rekam Medis</label>
-                <input type="text" class="form-control" id="no_rm" name="no_rm"
-                    value="{{ old('no_rm', $pasien->no_rm) }}" required>
-            </div>
-
-            <button type="submit" class="btn" style="background-color: #a40000; color: white;">Edit</button>
-            <a href="{{ route('admin.pasien') }}" class="btn" style="background-color: #0277bd; color: white;">Batal</a>
-        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID Obat</th>
+                    <th scope="col">Nama Obat</th>
+                    <th scope="col">Kemasan</th>
+                    <th scope="col">Harga</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($obat as $o)
+                    <tr>
+                        <td>{{ $o->id }}</td>
+                        <td>{{ $o->nama_obat }}</td>
+                        <td>{{ $o->kemasan }}</td>
+                        <td>{{ $o->harga }}</td>
+                        <td>
+                            <a href="{{ route('admin.obat.edit', $o->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.obat.hapus', $o->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection

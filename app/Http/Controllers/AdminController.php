@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokter;
+use App\Models\Obat;
 use App\Models\Pasien;
 use App\Models\Poli;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Termwind\Components\Raw;
 
 class AdminController extends Controller
 {
@@ -16,10 +18,11 @@ class AdminController extends Controller
         $jumlahPoli = Poli::count();
         $jumlahDokter = Dokter::count();
         $jumlahPasien = Pasien::count();
+        $jumlahObat = Obat::count();
 
         return view(
             'admin.dashboard',
-            compact('jumlahPoli', 'jumlahDokter', 'jumlahPasien')
+            compact('jumlahPoli', 'jumlahDokter', 'jumlahPasien', 'jumlahObat')
         );
     }
 
@@ -173,22 +176,24 @@ class AdminController extends Controller
     // add dokter
     public function addDokter(Request $request)
     {
+        // dd($request->all());
+
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama_dokter' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'no_hp' => 'required|string|max_digits:10',
             'id_poli' => 'required|integer',
         ]);
 
         $dokter = new Dokter();
-        $dokter->nama = $request->input('nama');
+        $dokter->nama = $request->input('nama_dokter');
         $dokter->alamat = $request->input('alamat');
         $dokter->no_hp = $request->input('no_hp');
         $dokter->id_poli = $request->input('id_poli');
         $dokter->save();
 
         User::create([
-            'name' => $request->input('nama'),
+            'name' => $request->input('nama_dokter'),
             'email' => strtolower(str_replace(' ', '_', $request->input('nama'))) . "@gmail.com",
             'password' => '123',
             'role' => 'dokter',
@@ -270,5 +275,72 @@ class AdminController extends Controller
         $pasien->delete();
 
         return redirect()->route('admin.pasien')->with('success', 'Data Pasien berhasil dihapus.');
+    }
+
+    // panggil halaman obat
+    public function showObat()
+    {
+        $obat = Obat::all();
+
+        return view('admin.viewObat', compact('obat'));
+    }
+
+    // panggil halaman tambah obat
+    public function createObat()
+    {
+        return view('admin.addObat');
+    }
+
+    // panggil halaman edit obat
+    public function editObat($id)
+    {
+        $obat = Obat::findOrFail($id);
+
+        return view('admin.editObat', compact('obat'));
+    }
+
+    // add obat
+    public function addObat(Request $request)
+    {
+        $request->validate([
+            'nama_obat' => 'required|string|max:255',
+            'kemasan' => 'nullable|string',
+            'harga' => 'required|integer',
+        ]);
+
+        $obat = new Obat();
+        $obat->nama_obat = $request->input('nama_obat');
+        $obat->kemasan = $request->input('kemasan');
+        $obat->harga = $request->input('harga');
+        $obat->save();
+
+        return redirect()->route('admin.obat')->with('success', 'Data Obat berhasil ditambahkan.');
+    }
+
+    // update obat
+    public function updateObat(Request $request, $id)
+    {
+        $request->validate([
+            'nama_obat' => 'required|string|max:255',
+            'kemasan' => 'nullable|string',
+            'harga' => 'required|integer',
+        ]);
+
+        $obat = Obat::findOrFail($id);
+        $obat->nama_obat = $request->input('nama_obat');
+        $obat->kemasan = $request->input('kemasan');
+        $obat->harga = $request->input('harga');
+        $obat->save();
+
+        return redirect()->route('admin.obat')->with('success', 'Data Obat berhasil diperbarui.');
+    }
+
+    // hapus obat
+    public function hapusObat($id)
+    {
+        $obat = Obat::findOrFail($id);
+        $obat->delete();
+
+        return redirect()->route('admin.obat')->with('success', 'Data Obat berhasil dihapus.');
     }
 }
