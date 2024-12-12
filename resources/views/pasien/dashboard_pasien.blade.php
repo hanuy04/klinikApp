@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </nav>
-            <form method="POST" action="{{ route('logout') }}" class="p-6">
+            <form method="POST" action="{{ route('logoutpasien') }}" class="p-6">
                 @csrf
                 <button type="submit" class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Logout</button>
             </form>

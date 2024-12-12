@@ -9,7 +9,7 @@ use App\Http\Controllers\PatientController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 // login admin/dokter
 Route::get('/login', [MainController::class, 'showLoginPage'])->name('login');
@@ -28,6 +28,11 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect()->route('login');
 })->name('logout');
+
+Route::post('/logoutpasien', function () {
+    Auth::logout();
+    return redirect()->route('welcome');
+})->name('logoutpasien');
 
 
 // route untuk admin

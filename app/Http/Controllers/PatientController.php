@@ -54,7 +54,7 @@ class PatientController extends Controller
 
         // Redirect based on the user's role
         if ($user->role === 'pasien') {
-            return redirect()->route('dashboard_pasien');
+            return redirect()->route('pasien.dashboard_pasien');
         } else if ($user->role === 'dokter') {
             return redirect()->route('dokter.dashboard');
         } else {
