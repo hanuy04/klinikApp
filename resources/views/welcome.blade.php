@@ -70,10 +70,12 @@
             <div class="col-6 col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_640.png"
-                            alt="Pasien Lama" class="rounded-circle mb-3">
-                        <h5 class="card-title">Pasien Lama</h5>
-                        <button class="btn btn-primary">Login</button>
+                        <form action="{{ route('login') }}" >
+                            <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_640.png"
+                                alt="Pasien Lama" class="rounded-circle mb-3">
+                            <h5 class="card-title">Pasien Lama</h5>
+                            <button type="submit" class="btn btn-primary" >Login</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -81,10 +83,12 @@
             <div class="col-6 col-md-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_640.png"
-                            alt="Pasien Baru" class="rounded-circle mb-3">
-                        <h5 class="card-title">Pasien Baru</h5>
-                        <button class="btn btn-primary">Daftar</button>
+                        <form action="{{ route('register') }}" >
+                            <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_640.png"
+                                alt="Pasien Baru" class="rounded-circle mb-3">
+                            <h5 class="card-title">Pasien Baru</h5>
+                            <button type="submit" class="btn btn-primary">Daftar</button>
+                        </form>
                     </div>
                 </div>
             </div>

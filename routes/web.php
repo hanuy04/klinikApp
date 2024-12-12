@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PatientController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,6 +14,14 @@ Route::get('/', function () {
 // login admin/dokter
 Route::get('/login', [MainController::class, 'showLoginPage'])->name('login');
 Route::post('/login', [MainController::class, 'doLogin'])->name('login.submit');
+
+// login psien
+Route::get('/loginpasien', [PatientController::class, 'showLoginPasienForm'])->name('login_pasien');
+Route::post('/loginpasien', [PatientController::class, 'doLoginPasien'])->name('login_pasien.submit');
+
+// Route untuk halaman registrasi
+Route::get('/register', [PatientController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [PatientController::class, 'register'])->name('register.submit');
 
 // logout
 Route::post('/logout', function () {
@@ -50,9 +60,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
-    Route::get('/pilih-poli', [PendaftaranController::class, 'pilihPoli'])->name('pilih.poli');
-    Route::post('/pilih-poli', [PendaftaranController::class, 'prosesPilihPoli'])->name('proses.pilih.poli');
-    Route::get('/pilih-dokter/{poliId}', [PendaftaranController::class, 'pilihDokter'])->name('pilih.dokter');
-    Route::post('/pilih-dokter', [PendaftaranController::class, 'prosesPilihDokter'])->name('proses.pilih.dokter');
-    Route::get('/nomor-antrian/{id}', [PendaftaranController::class, 'nomorAntrian'])->name('nomor.antrian');
+    Route::get('/dashboard_pasien', [PatientController::class, 'showDashboardPasien'])->name('pasien.dashboard_pasien');
+ 
 });

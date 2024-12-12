@@ -7,7 +7,7 @@
                     <h3>Login</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('login.submit') }}" method="POST">
+                    <form action="{{ route('login_pasien.submit') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
