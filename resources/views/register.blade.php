@@ -49,6 +49,11 @@
                         Register
                     </button>
                 </form>
+                @if (session('error'))
+                        <div class="mt-3 alert alert-danger text-center">
+                            {{ session('error') }}
+                        </div>
+                @endif
                 <div class="mt-3 text-center">
                         <a href="{{ route('login_pasien') }}" class="btn btn-link">Go to Login</a>
                 </div>

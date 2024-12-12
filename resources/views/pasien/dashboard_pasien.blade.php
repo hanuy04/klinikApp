@@ -16,13 +16,7 @@
             <nav class="flex-1">
                 <ul>
                     <li class="px-6 py-3 hover:bg-purple-700">
-                        <a href="#" class="block">Dashboard</a>
-                    </li>
-                    <li class="px-6 py-3 hover:bg-purple-700">
                         <a href="#" class="block">Pilih Poli</a>
-                    </li>
-                    <li class="px-6 py-3 hover:bg-purple-700">
-                        <a href="#" class="block">Riwayat</a>
                     </li>
                 </ul>
             </nav>
@@ -35,8 +29,7 @@
         <!-- Content -->
         <main class="flex-1 bg-gray-100 p-8">
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h1 class="text-2xl font-semibold text-gray-700">Selamat Datang, Pasien</h1>
-                <p class="text-gray-600 mt-4">Silakan memilih menu di sidebar untuk melanjutkan.</p>
+                @yield('content')
             </div>
         </main>
     </div>

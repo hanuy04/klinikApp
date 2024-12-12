@@ -54,7 +54,7 @@ class PatientController extends Controller
 
         // Redirect based on the user's role
         if ($user->role === 'pasien') {
-            return redirect()->route('pasien.dashboard_pasien');
+            return redirect()->route('pasien.pilih-poli');
         } else if ($user->role === 'dokter') {
             return redirect()->route('dokter.dashboard');
         } else {
@@ -71,81 +71,81 @@ class PatientController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            // 'no_ktp' => 'required|numeric|unique:users,no_ktp',
+            // 'no_hp' => 'required|numeric',
         ]);
 
+        // // Periksa apakah no_ktp sudah terdaftar
+        // $existingUser = Pasien::where('no_ktp', $request->no_ktp)->first();
+        // if ($existingUser) {
+        //     return redirect()->back()->withErrors(['no_ktp' => 'Nomor KTP sudah terdaftar.']);
+        // }else{
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
             'role' => 'pasien',
         ]);
+        // }
+
+        // // Hitung jumlah pasien yang terdaftar bulan ini
+        // $currentYearMonth = now()->format('Ym'); // Contoh: 202411
+        // $patientsCount = Pasien::count();
+
+        // // Generate nomor rekam medis dengan format 'RM-TahunBulan-Urutan'
+        // $no_rm = 'RM: ' . $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
+
+        // // Simpan data pasien baru ke tabel Pasien
+        // Pasien::create([
+        //     'name' => $request->name,
+        //     'no_ktp' => $request->no_ktp,
+        //     'no_hp' => $request->no_hp,
+        //     'no_rm' => $no_rm,
+        // ]);
 
         return redirect()->route('login_pasien')->with('success', 'Registration successful. Please log in.');
     }
 
-    // public function checkpasien()
-    // {
-    //     // Pastikan pengguna sudah login dan memiliki role 'pasien'
-    //     if (User::check() && User::user()->role === 'pasien') {
-    //         // Jika iya, arahkan ke dashboard pasien
-    //         return view('dashboard.patient');
-    //     } else {
-    //         // Jika tidak, arahkan ke halaman yang sesuai (misalnya, halaman login atau halaman error)
-    //         return redirect()->route('loginpasien')->with('error', 'Anda tidak memiliki akses.');
-    //     }
-    // }
+    // Halaman memilih poli
+    public function pilihPoli()
+    {
+        $polis = Poli::all(); // Ambil semua poli
+        return view('pasien.pilih-poli', compact('polis'));
+    }
 
-    // Menampilkan halaman memilih poli
-    // public function pilihPoli()
-    // {
-    //     $poliklinik = Poli::all();
-    //     $pasien = auth()->user(); // Mendapatkan data pasien yang login
-    //     return view('pilih-poli', compact('pilihPoli', 'pasien'));
-    // }
+    // Halaman memilih dokter setelah memilih poli
+    public function pilihDokter(Request $request, Poli $poli)
+    {
+        $pasien = Pasien::find($request->pasien_id);
+        $dokters = $poli->dokters;
 
-    // // Proses memilih poli
-    // public function prosesPilihPoli(Request $request)
-    // {
-    //     $pasien = auth()->user();
+        $jadwals = [];
+        if ($request->has('dokter_id')) {
+            $jadwals = JadwalPeriksa::where('id_dokter', $request->dokter_id)->get();
+        }
 
-    //     if ($pasien->status === 'baru') {
-    //         // Pasien baru harus mendaftarkan diri
-    //         return redirect()->route('pendaftaran_pasien_baru')->with('poli_id', $request->poliklinik_id);
-    //     } else {
-    //         // Pasien lama langsung ke halaman pilih dokter
-    //         return redirect()->route('pilih.dokter', $request->poliklinik_id);
-    //     }
-    // }
+        return view('pasien.pilih-dokter', compact('poli', 'dokters', 'jadwals', 'pasien'));
+    }
 
-    // // Menampilkan halaman memilih dokter
-    // public function pilihDokter($poliId)
-    // {
-    //     $dokter = Dokter::where('poliklinik_id', $poliId)->get();
-    //     $poliklinik = Poliklinik::findOrFail($poliId);
-    //     return view('pilih_dokter', compact('dokter', 'poliklinik'));
-    // }
+    // Proses pendaftaran nomor antrian
+    public function daftarAntrian(Request $request)
+    {
+        $request->validate([
+            'pasien_id' => 'required|exists:pasien,id',
+            'dokter_id' => 'required|exists:dokter,id',
+            'jadwal_id' => 'required|exists:jadwal_periksa,id',
+        ]);
 
-    // // Proses memilih dokter
-    // public function prosesPilihDokter(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'dokter_id' => 'required|integer',
-    //         'keluhan' => 'nullable|string',
-    //     ]);
+        $noAntrian = DaftarPoli::where('id_jadwal', $request->jadwal_id)->max('no_antrian') + 1;
 
-    //     $pendaftaran = Pendaftaran::create([
-    //         'pasien_id' => auth()->id(),
-    //         'dokter_id' => $validatedData['dokter_id'],
-    //         'keluhan' => $validatedData['keluhan'] ?? null,
-    //     ]);
+        DaftarPoli::create([
+            'id_pasien' => $request->pasien_id,
+            'id_jadwal' => $request->jadwal_id,
+            'keluhan' => $request->keluhan,
+            'no_antrian' => $noAntrian,
+        ]);
 
-    //     return redirect()->route('nomor.antrian', $pendaftaran->id);
-    // }
-
-    // // Menampilkan nomor antrian
-    // public function nomorAntrian($id)
-    // {
-    //     $pendaftaran = Pendaftaran::with(['dokter', 'poliklinik'])->findOrFail($id);
-    //     return view('nomor_antrian', compact('pendaftaran'));
-    // }
+        return redirect()->route('pasien.pilih-poli')->with('success', "Pendaftaran berhasil! Nomor antrian Anda adalah $noAntrian.");
+    }
+   
 }

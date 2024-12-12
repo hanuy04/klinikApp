@@ -65,8 +65,15 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () {
-    Route::get('/dashboard_pasien', [PatientController::class, 'showDashboardPasien'])->name('pasien.dashboard_pasien');
- 
+    // Route::get('/dashboard_pasien', [PatientController::class, 'showDashboardPasien'])->name('pasien.dashboard_pasien');
+    // Halaman daftar poli
+    Route::get('/pilih-poli', [PatientController::class, 'pilihPoli'])->name('pasien.pilih-poli');
+
+    // Pilih dokter dan jadwal setelah poli dipilih
+    Route::get('/pilih-dokter/{poli}', [PatientController::class, 'pilihDokter'])->name('pasien.pilih-dokter');
+
+    // Proses pendaftaran pasien dan nomor antrian
+    Route::post('/daftar-antrian', [PatientController::class, 'daftarAntrian'])->name('pasien.daftar-antrian');
 });
 Route::get('/dokter',function(){
     return view('dokter/dashboard');
