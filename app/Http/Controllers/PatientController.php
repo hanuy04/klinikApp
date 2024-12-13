@@ -144,6 +144,7 @@ class PatientController extends Controller
         $request->validate([
             'dokter_id' => 'required|exists:dokter,id',
             'jadwal_id' => 'required|exists:jadwal_periksa,id',
+            'keluhan' => 'required',
         ]);
         
         // Ambil nama pasien dari session atau parameter
@@ -169,7 +170,7 @@ class PatientController extends Controller
             'id_pasien' => $pasien->id,
             'id_jadwal' => $jadwal->id,
             'no_antrian' => $nomorAntrian,
-            'keluhan' => "",
+            'keluhan' => $request->input('keluhan'),
         ]);
         
         // Redirect ke halaman jadwal pasien dengan pesan sukses

@@ -34,6 +34,12 @@
                                 </select>
                             </div>
                             <br>
+                            <div class="mt-4">
+                                <label for="keluhan" class="block text-gray-700 font-medium">Keluhan:</label>
+                                <input type="text" name="keluhan" id="keluhan"
+                                    class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Masukkan keluhan Anda" required>
+                            </div>
                             <button type="submit"
                                 class="w-full py-2 mt-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-all duration-200">
                                 Pilih Dokter & Jadwal
