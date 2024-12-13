@@ -37,18 +37,18 @@ class PatientController extends Controller
     public function doLoginPasien(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name_or_nr_medis' => 'required', // Input bisa berupa nama atau nr_medis
             'password' => 'required'
         ]);
-
-        // Find the user by email
-        $user = User::where('name', $request->name)->first();
-
-        // Check if the user exists and the password matches directly
-        if (
-            !$user || $user->password !== $request->password
-        ) {
-            return back()->with('error', 'Name atau password salah.');
+    
+        // Cari user berdasarkan nama atau nr_medis
+        $user = User::where('name', $request->name_or_nr_medis)
+                    ->orWhere('nr_medis', $request->name_or_nr_medis)
+                    ->first();
+    
+        // Periksa apakah user ditemukan dan password cocok
+        if (!$user || $user->password !== $request->password) {
+            return back()->with('error', 'Nama/Nr Medis atau password salah.');
         }
 
         // Log the user in

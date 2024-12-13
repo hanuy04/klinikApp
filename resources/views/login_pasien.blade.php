@@ -10,8 +10,8 @@
                     <form action="{{ route('login_pasien.submit') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" required>
+                            <label for="name_or_nr_medis" class="form-label">Name</label>
+                            <input type="text" name="name_or_nr_medis" id="name_or_nr_medis" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
