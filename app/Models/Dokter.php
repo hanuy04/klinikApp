@@ -32,4 +32,9 @@ class Dokter extends Model
     {
         return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'nama', 'name');
+    }
 }

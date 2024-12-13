@@ -82,11 +82,14 @@ Route::prefix('pasien')->middleware(['auth', 'role:pasien'])->group(function () 
     Route::get('/jadwal', [PatientController::class, 'lihatJadwal'])->name('pasien.jadwal');
 });
 Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () {
-    Route::get('/dashboard',[DokterController::class,'showDashboard'])->name('dokter.dashboard');
-    Route::post('/submittanggal',[DokterController::class,'simpantanggal'])->name('dokter.submittanggal');
-    
-    Route::get('/detailpemeriksaaan',[DokterController::class,'detailPemeriksaan'])->name('dokter.detailpemeriksaaan');
-    Route::post('/simpanpemeriksaan',[DokterController::class,'simpanpemeriksaan'])->name('dokter.simpanpemeriksaan');
-    Route::get("/historypasien",[DokterController::class,'historypasien'])->name(name: 'dokter.historypasien');
-    Route::get("/detailpasien",[DokterController::class,'detailpasien'])->name(name: 'dokter.detailpasien');
+    Route::get('/dashboard', [DokterController::class, 'showDashboard'])->name('dokter.dashboard');
+    Route::post('/submittanggal', [DokterController::class, 'simpantanggal'])->name('dokter.submittanggal');
+
+    Route::get('/detailpemeriksaaan', [DokterController::class, 'detailPemeriksaan'])->name('dokter.detailpemeriksaaan');
+    Route::post('/simpanpemeriksaan', [DokterController::class, 'simpanpemeriksaan'])->name('dokter.simpanpemeriksaan');
+    Route::get("/historypasien", [DokterController::class, 'historypasien'])->name(name: 'dokter.historypasien');
+    Route::get("/detailpasien", [DokterController::class, 'detailpasien'])->name(name: 'dokter.detailpasien');
+
+    Route::get('/view/profile', [DokterController::class, 'showProfile'])->name('dokter.profile');
+    Route::post('/update-akun', [DokterController::class, 'updateAkun'])->name('dokter.updateAkun');
 });

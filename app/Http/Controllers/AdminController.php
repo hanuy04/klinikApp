@@ -194,7 +194,7 @@ class AdminController extends Controller
 
         User::create([
             'name' => $request->input('nama_dokter'),
-            'email' => strtolower(str_replace(' ', '_', $request->input('nama'))) . "@gmail.com",
+            'email' => strtolower(str_replace(' ', '_', $request->input('nama_dokter'))) . "@gmail.com",
             'password' => '123',
             'role' => 'dokter',
         ]);

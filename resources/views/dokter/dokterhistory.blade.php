@@ -26,12 +26,12 @@
                         <?php
                         if(is_null($item->periksa)){
                             ?>
-                            <form method="POST" action="{{route('dokter.submittanggal')}}">
-                                {{ csrf_field() }}
-                                <input type="hidden" value="{{$item->id}}" name="id_daftar_poli">
-                        <input type="date" name="tgl_periksa">
-                        <button type="submit" class="btn btn-success">Simpan</button>
-                            </form>
+                        <form method="POST" action="{{ route('dokter.submittanggal') }}">
+                            {{ csrf_field() }}
+                            <input type="hidden" value="{{ $item->id }}" name="id_daftar_poli">
+                            <input type="date" name="tgl_periksa">
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </form>
                         <?php
                         }else{
                             ?>
@@ -42,8 +42,9 @@
                         ?>
                     </td>
                     <td>{{ $item->no_antrian }}</td>
-                    <td><a href="{{route('dokter.detailpasien',['id'=>$item->id_pasien])}}"><img src="https://static.thenounproject.com/png/171127-200.png" width="25"
-                            style="cursor: pointer"></a></td>
+                    <td><a href="{{ route('dokter.detailpasien', ['id' => $item->id_pasien]) }}"><img
+                                src="https://static.thenounproject.com/png/171127-200.png" width="25"
+                                style="cursor: pointer"></a></td>
                 </tr>
                 <?php
                 }

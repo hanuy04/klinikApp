@@ -27,13 +27,20 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{route('dokter.dashboard')}}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ route('dokter.dashboard') }}">Home <span
+                        class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('dokter.historypasien')}}">Riwayat Pasien</a>
+                <a class="nav-link" href="{{ route('dokter.historypasien') }}">Riwayat Pasien</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('dokter.historypasien')}}">Pengaturan</a>
+                <a class="nav-link" href="{{ route('dokter.profile') }}">Pengaturan</a>
+            </li>
+            <li class="nav-item">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
             </li>
         </ul>
     </div>

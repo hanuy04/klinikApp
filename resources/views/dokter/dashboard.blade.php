@@ -33,17 +33,23 @@
                 <a class="nav-link" href="#">Riwayat Pasien</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Pengaturan</a>
+                <a class="nav-link" href="{{ route('dokter.profile') }}">Pengaturan</a>
+            </li>
+            <li class="nav-item">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
             </li>
         </ul>
     </div>
 </nav>
 
 <body>
-@foreach ($listpasien as $item)
-    <p>{{$item->keluhan}}</p>
-@endforeach
-@include('dokter/detailpasien')
+    @foreach ($listpasien as $item)
+        <p>{{ $item->keluhan }}</p>
+    @endforeach
+    @include('dokter/detailpasien')
 </body>
 
 </html>

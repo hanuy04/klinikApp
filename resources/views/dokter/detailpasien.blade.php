@@ -16,14 +16,13 @@
             </tr>
         </thead>
         <tbody>
-            
+
             @foreach ($data['riwayat'] as $item)
-                
                 <tr>
-                    <td>{{$item["catatan"]}}</td>
-                    <td>{{$item["tanggal"]}}</td>
-                    <td><?= implode("<br>",$item["obat"]) ?></td>
-                    <td>Rp {{$item["biaya"]}}</td>
+                    <td>{{ $item['catatan'] }}</td>
+                    <td>{{ $item['tanggal'] }}</td>
+                    <td><?= implode('<br>', $item['obat']) ?></td>
+                    <td>Rp {{ $item['biaya'] }}</td>
                 </tr>
             @endforeach
         </tbody>

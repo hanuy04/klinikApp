@@ -82,4 +82,16 @@ class User extends Authenticatable
     {
         return $this->role === 'pasien';
     }
+
+    // app/Models/User.php
+
+    public function dokter()
+    {
+        return $this->hasOne(Dokter::class, 'nama', 'name');
+    }
+
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class);
+    }
 }

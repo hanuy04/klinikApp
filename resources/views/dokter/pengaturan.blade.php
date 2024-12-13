@@ -1,26 +1,27 @@
 @include('dokter.navdokter')
 <div class="container">
-    <p class="text-center" style="font-size: 35px"><b>Pengaturan Akun</b></p>
-    <form>
+    <p class="text-center" style="font-size: 35px"><b>Pengaturan Akun Dokter</b></p>
+    <form method="POST" action="{{ route('dokter.updateAkun') }}">
+        @csrf
         <div class="form-group">
-            <label for="exampleInputPassword1">Nama</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Nama Anda">
+            <label for="nama">Nama</label>
+            <input type="text" class="form-control" id="nama" name="nama" value="{{ $dokter->nama }}">
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Gelar</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Gelar Anda">
+            <label for="id_poli">Poli</label>
+            <select class="form-control" id="id_poli" name="id_poli">
+                @foreach ($polis as $poli)
+                    <option value="{{ $poli->id }}"
+                        {{ old('poli', $dokter->id_poli ?? '') == $poli->id ? 'selected' : '' }}>{{ $poli->nama_poli }}
+                    </option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
-            <label for="exampleInputPassword1">Poli</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Poli Anda">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" value="{{ $user->password }}">
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Masukkan Password Anda">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Edit</button>
+        <a href="{{ route('dokter.dashboard') }}" class="btn btn-danger">Kembali</a>
     </form>
 </div>
-</body>
-
-</html>
