@@ -124,7 +124,7 @@ class AdminController extends Controller
             'nama' => 'required|string|max:150',
             'no_ktp' => 'required|string|max_digits:10',
             'no_hp' => 'required|string|max_digits:10',
-            'no_rm' => 'required|char|max:10',
+            'no_rm' => 'required|string',
         ]);
 
         $pasien = Pasien::findOrFail($id);
