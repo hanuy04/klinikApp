@@ -21,4 +21,7 @@ class Obat extends Model
     ];
 
     public $timestamps = false;
+    public function detailperiksa(){
+        return $this->hasOne(DetailPeriksa::class,'id');
+    }
 }

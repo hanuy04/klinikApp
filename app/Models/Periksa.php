@@ -9,7 +9,7 @@ class Periksa extends Model
 {
     use HasFactory;
     protected $table = 'periksa';
-
+    public $timestamps = false;
     protected $fillable = [
         'id_daftar_poli',
         'tgl_periksa',
@@ -18,5 +18,8 @@ class Periksa extends Model
     ];
     public function daftarpoli(){
         return $this->hasOne(DaftarPoli::class,'id_daftar_poli');
+    }
+    public function detailperiksa(){
+        return $this->belongsTo(DetailPeriksa::class,'id');
     }
 }
