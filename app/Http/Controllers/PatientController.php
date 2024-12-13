@@ -88,6 +88,7 @@ class PatientController extends Controller
             $user->email = $request->input('email');
             $user->password = $request->input('password');
             $user->role = "pasien";
+            $user->nr_medis = $this->generateNoRm();
             $user->created_at = now();
             $user->updated_at = now();
             $user->save();
@@ -98,14 +99,9 @@ class PatientController extends Controller
             $pasien->nama = $request->input('name');
             $pasien->no_ktp = $request->input('no_ktp');
             $pasien->no_hp = $request->input('no_hp');
+            $pasien->no_rm = $this->generateNoRm();
             $pasien->save();
 
-            // Simpan data pasien baru ke tabel Pasien
-            $pasien = new Pasien;
-            $pasien->nama = $request->input('name');
-            $pasien->no_ktp = $request->input('no_ktp');
-            $pasien->no_hp = $request->input('no_hp');
-            $pasien->save();
 
         }
 
@@ -113,7 +109,7 @@ class PatientController extends Controller
     }
 
     // Function to generate a unique no_rm
-    function generateNoRm() {
+    private function generateNoRm() {
         $currentYearMonth = now()->format('Ym'); // Example: 202411
         $patientsCount = Pasien::count();
         return 'RM-' . $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
