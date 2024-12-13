@@ -92,4 +92,6 @@ Route::prefix('dokter')->middleware(['auth', 'role:dokter'])->group(function () 
 
     Route::get('/view/profile', [DokterController::class, 'showProfile'])->name('dokter.profile');
     Route::post('/update-akun', [DokterController::class, 'updateAkun'])->name('dokter.updateAkun');
+    Route::get("/jadwaldokter",[DokterController::class,'jadwaldokter'])->name(name: 'dokter.jadwaldokter');
+    Route::post('/simpanjadwal',[DokterController::class,'simpanjadwal'])->name('dokter.simpanjadwal');
 });

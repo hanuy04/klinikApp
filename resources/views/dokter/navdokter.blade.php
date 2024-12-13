@@ -36,6 +36,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('dokter.profile') }}">Pengaturan</a>
             </li>
+            <li class="nav-item">   
+                <a class="nav-link" href="{{route('dokter.jadwaldokter')}}">Jadwal</a>
+            </li>
             <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf

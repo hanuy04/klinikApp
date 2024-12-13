@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalPeriksa extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $table = 'jadwal_periksa';
 
     protected $fillable = [
