@@ -27,9 +27,12 @@
                                     class="w-full mt-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="">Pilih Jadwal</option>
                                     @foreach ($dokter->jadwalPeriksas as $jadwal)
-                                        <option value="{{ $jadwal->id }}">
-                                            {{ $jadwal->hari }} - {{ $jadwal->jam_mulai }} hingga {{ $jadwal->jam_selesai }}
-                                        </option>
+                                        @if ($jadwal->jam_mulai !== '12:34:56' && $jadwal->jam_selesai !== '12:34:56')
+                                            <option value="{{ $jadwal->id }}">
+                                                {{ $jadwal->hari }} - {{ substr($jadwal->jam_mulai, 0, 5) }} hingga
+                                                {{ substr($jadwal->jam_selesai, 0, 5) }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
