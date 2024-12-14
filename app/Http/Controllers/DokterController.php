@@ -23,7 +23,9 @@ class DokterController extends Controller
             $datae = JadwalPeriksa::where('id', '=', $item->id_jadwal)->first();
             array_push($datadokter, $datae->id_dokter);
         }
-        return view('dokter.dokterlistperiksa', compact('listpasien', 'datadokter'));
+        $getnama = User::where("id","=",$request->session()->get("idlogin"))->first();
+        $getdokter = Dokter::where("nama","=",$getnama->name)->first();
+        return view('dokter.dokterlistperiksa', compact('listpasien', 'datadokter','getdokter'));
     }
     public function detailPemeriksaan(Request $request)
     {

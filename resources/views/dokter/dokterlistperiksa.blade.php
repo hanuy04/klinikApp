@@ -17,7 +17,8 @@
             ?>
             @foreach ($listpasien as $item)
                 <?php
-                if ($datadokter[$cntr] == request()->session()->get("idlogin") && (is_null($item->periksa) || $item->periksa->catatan == "")){
+                
+                if ($datadokter[$cntr] == $getdokter->id && (is_null($item->periksa) || $item->periksa->catatan == "")){
                 ?>
                 <tr>
                     <td>{{ $item->pasien->nama }}</td>
