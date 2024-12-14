@@ -154,6 +154,21 @@ class PatientController extends Controller
             return redirect()->route('pasien.pilih-poli')->with('error', 'Pasien tidak ditemukan.');
         }
 
+        if (!$pasien->no_rm) {
+            // Generate nomor rekam medis jika belum ada
+            $pasien->no_rm = $this->generateNoRm();
+            $pasien->save(); // Simpan perubahan pada pasien
+        }
+
+        // Cari user terkait berdasarkan pasien_name
+        $user = User::where('name', $pasien_name)->first();
+
+        if ($user && !$user->nr_medis) {
+            // Tambahkan no_medis ke user jika belum ada
+            $user->nr_medis = $pasien->no_rm;
+            $user->save(); // Simpan perubahan pada user
+        }
+
         // Ambil data dokter dan jadwal yang dipilih
         $dokter = Dokter::findOrFail($request->dokter_id);
         $jadwal = JadwalPeriksa::findOrFail($request->jadwal_id);
