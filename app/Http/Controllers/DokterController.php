@@ -157,22 +157,44 @@ class DokterController extends Controller
     }
     public function jadwaldokter(Request $request)
     {
-        $datajadwal = JadwalPeriksa::where("id_dokter", "=", $request->session()->get("idlogin"))->get();
+        $getnama = User::where("id","=",$request->session()->get("idlogin"))->first();
+        $getdokter = Dokter::where("nama","=",$getnama->name)->first();
+        $datajadwal = JadwalPeriksa::where("id_dokter", "=", $getdokter->id)->get();
+        foreach($datajadwal as $dd){
+            if($dd->jam_mulai == "12:34:56"){
+                $dd->jam_mulai = null;
+                $dd->jam_selesai = null;
+            }else{
+                $arr = explode(":",$dd->jam_mulai);
+                $dd->jam_mulai = $arr[0].":".$arr[1];
+                $arr = explode(":",$dd->jam_selesai);
+                $dd->jam_selesai = $arr[0].":".$arr[1];
+            }
+        }
         return view('dokter.jadwaldokter', ["datajadwal" => $datajadwal]);
     }
     public function simpanjadwal(Request $request)
     {
-        $cekjadwal = JadwalPeriksa::where("id_dokter", "=", $request->session()->get("idlogin"))->get();
+        $getnama = User::where("id","=",$request->session()->get("idlogin"))->first();
+        $getdokter = Dokter::where("nama","=",$getnama->name)->first();
+        $cekjadwal = JadwalPeriksa::where("id_dokter", "=", $getdokter->id)->get();
         if (count($cekjadwal) == 0) {
             if ($request->jam[0] != "") {
                 if ($request->jam[1] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
                 $simpan = new JadwalPeriksa();
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "senin";
                 $simpan->jam_mulai = $request->jam[0];
                 $simpan->jam_selesai = $request->jam[1];
+                $simpan->save();
+            }else{
+                $simpan = new JadwalPeriksa();
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->hari = "senin";
+                $simpan->jam_mulai = "-";
+                $simpan->jam_selesai = "-";
                 $simpan->save();
             }
             if ($request->jam[2] != "") {
@@ -180,10 +202,17 @@ class DokterController extends Controller
                     return redirect()->route('dokter.jadwaldokter');
                 }
                 $simpan = new JadwalPeriksa();
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "selasa";
                 $simpan->jam_mulai = $request->jam[2];
                 $simpan->jam_selesai = $request->jam[3];
+                $simpan->save();
+            }else{
+                $simpan = new JadwalPeriksa();
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->hari = "selasa";
+                $simpan->jam_mulai = "-";
+                $simpan->jam_selesai = "-";
                 $simpan->save();
             }
             if ($request->jam[4] != "") {
@@ -191,10 +220,17 @@ class DokterController extends Controller
                     return redirect()->route('dokter.jadwaldokter');
                 }
                 $simpan = new JadwalPeriksa();
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "rabu";
                 $simpan->jam_mulai = $request->jam[4];
                 $simpan->jam_selesai = $request->jam[5];
+                $simpan->save();
+            }else{
+                $simpan = new JadwalPeriksa();
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->hari = "rabu";
+                $simpan->jam_mulai = "-";
+                $simpan->jam_selesai = "-";
                 $simpan->save();
             }
             if ($request->jam[6] != "") {
@@ -202,10 +238,17 @@ class DokterController extends Controller
                     return redirect()->route('dokter.jadwaldokter');
                 }
                 $simpan = new JadwalPeriksa();
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "kamis";
                 $simpan->jam_mulai = $request->jam[6];
                 $simpan->jam_selesai = $request->jam[7];
+                $simpan->save();
+            }else{
+                $simpan = new JadwalPeriksa();
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->hari = "kamis";
+                $simpan->jam_mulai = "-";
+                $simpan->jam_selesai = "-";
                 $simpan->save();
             }
             if ($request->jam[8] != "") {
@@ -213,10 +256,17 @@ class DokterController extends Controller
                     return redirect()->route('dokter.jadwaldokter');
                 }
                 $simpan = new JadwalPeriksa();
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "jumat";
                 $simpan->jam_mulai = $request->jam[8];
                 $simpan->jam_selesai = $request->jam[9];
+                $simpan->save();
+            }else{
+                $simpan = new JadwalPeriksa();
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->hari = "jumat";
+                $simpan->jam_mulai = "-";
+                $simpan->jam_selesai = "-";
                 $simpan->save();
             }
         } else {
@@ -224,50 +274,80 @@ class DokterController extends Controller
                 if ($request->jam[1] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
-                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "senin", "and")->where("id_dokter", "=", $request->session()->get("idlogin"))->first();;
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "senin", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->jam_mulai = $request->jam[0];
                 $simpan->jam_selesai = $request->jam[1];
+                $simpan->save();
+            }else{
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "senin", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[2] != "") {
                 if ($request->jam[3] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
-                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "selasa", "and")->where("id_dokter", "=", $request->session()->get("idlogin"))->first();;
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "selasa", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->jam_mulai = $request->jam[2];
                 $simpan->jam_selesai = $request->jam[3];
+                $simpan->save();
+            }else{
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "selasa", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[4] != "") {
                 if ($request->jam[5] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
-                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "rabu", "and")->where("id_dokter", "=", $request->session()->get("idlogin"))->first();;
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "rabu", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->jam_mulai = $request->jam[4];
                 $simpan->jam_selesai = $request->jam[5];
+                $simpan->save();
+            }else{
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "rabu", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[6] != "") {
                 if ($request->jam[7] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
-                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "kamis", "and")->where("id_dokter", "=", $request->session()->get("idlogin"))->first();;
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "kamis", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->jam_mulai = $request->jam[6];
                 $simpan->jam_selesai = $request->jam[7];
+                $simpan->save();
+            }else{
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "kamis", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[8] != "") {
                 if ($request->jam[9] == "") {
                     return redirect()->route('dokter.jadwaldokter');
                 }
-                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "jumat", "and")->where("id_dokter", "=", $request->session()->get("idlogin"))->first();;
-                $simpan->id_dokter = $request->session()->get("idlogin");
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "jumat", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
                 $simpan->jam_mulai = $request->jam[8];
                 $simpan->jam_selesai = $request->jam[9];
+                $simpan->save();
+            }else{
+                $simpan = $simpan = JadwalPeriksa::where("hari", "=", "jumat", "and")->where("id_dokter", "=", $getdokter->id)->first();;
+                $simpan->id_dokter = $getdokter->id;
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
         }
