@@ -253,6 +253,12 @@ class AdminController extends Controller
     // hapus poli
     public function hapusPoli($id)
     {
+        $dokterCount = Dokter::where('id_poli', $id)->count();
+
+        if ($dokterCount > 0) {
+            return redirect()->route('admin.poli')->with('error', 'Tidak dapat menghapus Poli karena masih ada Dokter yang terkait.');
+        }
+
         $poli = Poli::findOrFail($id);
         $poli->delete();
 

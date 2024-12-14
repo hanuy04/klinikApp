@@ -40,12 +40,12 @@ class PatientController extends Controller
             'name_or_nr_medis' => 'required', // Input bisa berupa nama atau nr_medis
             'password' => 'required'
         ]);
-    
+
         // Cari user berdasarkan nama atau nr_medis
         $user = User::where('name', $request->name_or_nr_medis)
-                    ->orWhere('nr_medis', $request->name_or_nr_medis)
-                    ->first();
-    
+            ->orWhere('nr_medis', $request->name_or_nr_medis)
+            ->first();
+
         // Periksa apakah user ditemukan dan password cocok
         if (!$user || $user->password !== $request->password) {
             return back()->with('error', 'Nama/Nr Medis atau password salah.');
@@ -63,7 +63,7 @@ class PatientController extends Controller
         } else {
             return redirect()->route('admin.dashboard');
         }
-    
+
         // Redirect to login page if no valid role
         return redirect()->route('showLoginPage');
     }
@@ -88,7 +88,6 @@ class PatientController extends Controller
             $user->email = $request->input('email');
             $user->password = $request->input('password');
             $user->role = "pasien";
-            $user->nr_medis = $this->generateNoRm();
             $user->created_at = now();
             $user->updated_at = now();
             $user->save();
@@ -99,17 +98,15 @@ class PatientController extends Controller
             $pasien->nama = $request->input('name');
             $pasien->no_ktp = $request->input('no_ktp');
             $pasien->no_hp = $request->input('no_hp');
-            $pasien->no_rm = $this->generateNoRm();
             $pasien->save();
-
-
         }
 
         return redirect()->route('login_pasien')->with('success', 'Registration successful. Please log in.');
     }
 
     // Function to generate a unique no_rm
-    private function generateNoRm() {
+    private function generateNoRm()
+    {
         $currentYearMonth = now()->format('Ym'); // Example: 202411
         $patientsCount = Pasien::count();
         return 'RM-' . $currentYearMonth . '-' . str_pad($patientsCount + 1, 3, '0', STR_PAD_LEFT);
@@ -128,7 +125,7 @@ class PatientController extends Controller
     {
         $pasien_name = $request->pasien_name;  // Ambil nama pasien yang dikirim melalui URL
         $pasien = Pasien::where('nama', $pasien_name)->first();  // Cari pasien berdasarkan nama
-        
+
         if (!$pasien) {
             return redirect()->route('pasien.pilih-poli')->with('error', 'Pasien tidak ditemukan.');
         }
@@ -137,7 +134,7 @@ class PatientController extends Controller
 
         return view('pasien.pilih-dokter', compact('poli', 'dokters', 'pasien', 'pasien_name'));
     }
-    
+
     public function pilihDokterSubmit(Request $request, Poli $poli)
     {
         // Validasi input dari form
@@ -146,25 +143,25 @@ class PatientController extends Controller
             'jadwal_id' => 'required|exists:jadwal_periksa,id',
             'keluhan' => 'required',
         ]);
-        
+
         // Ambil nama pasien dari session atau parameter
         $pasien_name = session('pasien_name');
-        
+
         // Cari pasien berdasarkan nama
         $pasien = Pasien::where('nama', $pasien_name)->first();
-        
+
         if (!$pasien) {
             return redirect()->route('pasien.pilih-poli')->with('error', 'Pasien tidak ditemukan.');
         }
-        
+
         // Ambil data dokter dan jadwal yang dipilih
         $dokter = Dokter::findOrFail($request->dokter_id);
         $jadwal = JadwalPeriksa::findOrFail($request->jadwal_id);
-        
+
         // Hitung nomor antrean berdasarkan jadwal
         $antreanTerakhir = DaftarPoli::where('id_jadwal', $jadwal->id)->max('no_antrian');
         $nomorAntrian = $antreanTerakhir ? $antreanTerakhir + 1 : 1;
-        
+
         // Daftarkan pasien ke daftar poli
         DaftarPoli::create([
             'id_pasien' => $pasien->id,
@@ -172,7 +169,7 @@ class PatientController extends Controller
             'no_antrian' => $nomorAntrian,
             'keluhan' => $request->input('keluhan'),
         ]);
-        
+
         // Redirect ke halaman jadwal pasien dengan pesan sukses
         return redirect()->route('pasien.jadwal')->with('success', 'Anda berhasil mendaftar ke poli. Nomor antrean Anda: ' . $nomorAntrian);
     }
@@ -181,7 +178,7 @@ class PatientController extends Controller
     {
         // Ambil nama pasien dari session
         $pasien_name = session('pasien_name');
-        
+
         // Cari pasien berdasarkan nama
         $pasien = Pasien::where('nama', $pasien_name)->first();
 
@@ -197,7 +194,4 @@ class PatientController extends Controller
         // Mengirimkan data ke view
         return view('pasien.jadwal', compact('daftarPolis'));
     }
-    
 }
-
-

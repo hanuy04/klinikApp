@@ -39,6 +39,12 @@
     <div class="container mt-5" style="background-color: #b3e5fc; padding: 20px; border-radius: 10px;">
         <h1>Poli</h1>
 
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <a href="{{ route('admin.poli.create') }}" class="btn btn-primary mb-3">Tambah Poli</a>
 
         <table class="table table-striped">
