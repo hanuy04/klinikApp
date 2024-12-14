@@ -193,8 +193,8 @@ class DokterController extends Controller
                 $simpan = new JadwalPeriksa();
                 $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "senin";
-                $simpan->jam_mulai = "-";
-                $simpan->jam_selesai = "-";
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[2] != "") {
@@ -211,8 +211,8 @@ class DokterController extends Controller
                 $simpan = new JadwalPeriksa();
                 $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "selasa";
-                $simpan->jam_mulai = "-";
-                $simpan->jam_selesai = "-";
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[4] != "") {
@@ -229,8 +229,8 @@ class DokterController extends Controller
                 $simpan = new JadwalPeriksa();
                 $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "rabu";
-                $simpan->jam_mulai = "-";
-                $simpan->jam_selesai = "-";
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[6] != "") {
@@ -247,8 +247,8 @@ class DokterController extends Controller
                 $simpan = new JadwalPeriksa();
                 $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "kamis";
-                $simpan->jam_mulai = "-";
-                $simpan->jam_selesai = "-";
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
             if ($request->jam[8] != "") {
@@ -265,8 +265,8 @@ class DokterController extends Controller
                 $simpan = new JadwalPeriksa();
                 $simpan->id_dokter = $getdokter->id;
                 $simpan->hari = "jumat";
-                $simpan->jam_mulai = "-";
-                $simpan->jam_selesai = "-";
+                $simpan->jam_mulai = "12:34:56";
+                $simpan->jam_selesai = "12:34:56";
                 $simpan->save();
             }
         } else {
